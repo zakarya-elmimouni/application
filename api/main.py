@@ -1,10 +1,20 @@
 """A simple API to expose our trained RandomForest model for Tutanic survival."""
 from fastapi import FastAPI
-from joblib import load
+import mlflow
 
 import pandas as pd
 
-model = load('model.joblib')
+# Preload model -------------------
+
+model_name = "production"
+model_version = "latest"
+
+# Load the model from the Model Registry
+model_uri = f"models:/{model_name}/{model_version}"
+model = mlflow.sklearn.load_model(model_uri)
+
+# Define app -------------------------
+
 
 app = FastAPI(
     title="Prédiction de survie sur le Titanic",
@@ -23,7 +33,7 @@ def show_welcome_page():
     return {
         "Message": "API de prédiction de survie sur le Titanic",
         "Model_name": 'Titanic ML',
-        "Model_version": "0.2",
+        "Model_version": "0.3",
     }
 
 
