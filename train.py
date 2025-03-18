@@ -9,6 +9,8 @@ from loguru import logger
 
 import pathlib
 import pandas as pd
+from joblib import dump
+
 
 from src.pipeline.build_pipeline import split_train_test, create_pipeline
 from src.models.train_evaluate import evaluate_model
@@ -67,7 +69,7 @@ pipe = create_pipeline(
 # ESTIMATION ET EVALUATION ----------------------
 
 pipe.fit(X_train, y_train)
-
+dump(pipe, 'model.joblib')
 
 # Evaluate the model
 score, matrix = evaluate_model(pipe, X_test, y_test)
